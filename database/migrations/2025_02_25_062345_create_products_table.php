@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->unsignedInteger('id')->autoIncrement()->primary();
+            $table->unsignedInteger('id_group');
+            $table->string('name', 250);
+
+            $table->foreign('id_group')->references('id')->on('groups')->onDelete('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      */

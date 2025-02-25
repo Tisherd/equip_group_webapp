@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->unsignedInteger('id')->autoIncrement()->primary();
-            $table->integer('id_parent')->unsigned();
+            $table->unsignedInteger('id_parent');
             $table->string('name', 100);
         });
     }
