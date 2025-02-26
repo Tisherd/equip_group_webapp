@@ -17,6 +17,7 @@ class GroupController extends Controller
 
         return Inertia::render('CatalogPage', [
             'groups' => $groupHierarchy,
+            'initialProducts' => Product::with('price')->paginate(10),
         ]);
     }
 
