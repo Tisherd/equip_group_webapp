@@ -25,8 +25,8 @@ class GroupHierarchy
                 'name' => $group->name,
                 'products_quantity' => $group->products_count ?? 0,
                 'id_parent' => $group->id_parent,
-                'children' => [],
                 'full_group_ids' => [$group->id],
+                'children' => [],
             ];
         }
 

@@ -7,18 +7,25 @@ use App\Models\Product;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
+
 class GroupController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $groups = Group::withCount(['products as total_products' => function ($query) {
-            $query->whereHas('group');
-        }])->where('id_parent', 0)->get();
+        $groupId = $request->query('group_id', null);
 
-        $products = Product::with('price')->paginate(10);
+        $groupHierarchy = Group::withHierarchy();
+
+        if ($groupId) {
+            // Получаем все вложенные группы
+            $groupIds = array_column($groupHierarchy, 'full_group_ids');
+            $products = Product::with('price')->whereIn('id_group', $groupIds)->paginate(10);
+        } else {
+            $products = Product::with('price')->paginate(10);
+        }
 
         return Inertia::render('HomePage', [
-            'groups' => $groups,
+            'groups' => $groupHierarchy,
             'products' => $products,
         ]);
     }
