@@ -1,17 +1,19 @@
 <template>
-    <ul v-if="group.active" class="list-group">
+    <ul class="list-group">
         <li
-            v-for="group_child in group.children"
-            :key="group_child.id"
+            v-for="group in groups"
+            :key="group.id"
             class="list-group-item"
         >
             <p
-                @click="setActive(group_child)"
-                :class="{ 'active': group_child.active }">
-                {{ group_child.name }} ({{ group_child.products_quantity }})
+                @click="setActive(group)"
+                :class="{ 'active': group.active }">
+                {{ group.name }} ({{ group.products_quantity }})
             </p>
 
-            <GroupItem :group="group_child" />
+            <div v-if="group.active">
+                <Groups :groups="group.children" />
+            </div>
         </li>
     </ul>
 </template>
@@ -20,7 +22,7 @@
 
 
 defineProps({
-    group: {
+    groups: {
         type: Object,
         required: true
     }

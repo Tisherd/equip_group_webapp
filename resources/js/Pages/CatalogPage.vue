@@ -3,21 +3,7 @@
         <h1>Каталог товаров</h1>
 
         <h2>Группы товаров</h2>
-        <ul class="list-group">
-            <li
-                v-for="group in groups"
-                :key="group.id"
-                class="list-group-item"
-            >
-                <p
-                    @click="setActive(group)"
-                    :class="{ 'active': group.active }">
-                    {{ group.name }} ({{ group.products_quantity }})
-                </p>
-
-                <GroupItem :group="group" />
-            </li>
-        </ul>
+        <Groups :groups="groups" />
 
         <h2 class="mt-5">Товары</h2>
         <!-- <div class="row">
@@ -35,19 +21,8 @@
 </template>
 
 <script setup>
-import GroupItem from './GroupItem.vue';
+import Groups from './Groups.vue';
 const props = defineProps({
     groups: Array,
 });
-
-// Функция для обработки клика и установки active
-const setActive = (group) => {
-    group.active = !group.active; // Переключаем состояние
-};
 </script>
-
-<style scoped>
-.active {
-    background-color: #d4edda;
-}
-</style>
