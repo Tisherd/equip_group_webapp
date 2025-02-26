@@ -17,32 +17,50 @@
                 </div>
             </div>
         </div>
+
+        <!-- Пагинация -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li v-for="(link, k) in products.links" :key="k" class="page-item" :class="{ active: link.active, disabled: !link.url }">
+                    <a v-if="link.url" class="page-link" href="#" @click.prevent="fetchProducts(link.url)">{{ link.label }}</a>
+                    <span v-else class="page-link" v-html="link.label"></span>
+                </li>
+            </ul>
+        </nav>
     </div>
 </template>
 
 <script setup>
 import Groups from './Groups.vue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import axios from 'axios';
 
 const props = defineProps({
     groups: Array,
-    initialProducts: Object,  // Данные продуктов, передаваемые через props
 });
 
-let products = ref(props.initialProducts);  // Локальная реактивная переменная
-
+const products = ref({ data: [], links: [] });
+const activeGroup = ref(null);
 const activeGroups = reactive({});
 
-const updateActiveGroup = async (group) => {
-    // Запрос к API
+const fetchProducts = async (url = '/api/products') => {
     try {
-        const response = await axios.get('/api/products', {
-            params: { group_ids: group.full_group_ids }
+        const response = await axios.get(url, {
+            params: { group_ids: activeGroup.value }
         });
         products.value = response.data;
     } catch (error) {
         console.error('Ошибка загрузки товаров:', error);
     }
 };
+
+const updateActiveGroup = async (group) => {
+    activeGroup.value = group.full_group_ids;
+    fetchProducts();
+};
+
+onMounted(() => {
+    fetchProducts();
+});
 </script>
