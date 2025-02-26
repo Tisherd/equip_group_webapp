@@ -11,7 +11,7 @@
                 {{ group.name }} ({{ group.products_quantity }})
             </p>
 
-            <Groups v-if="activeGroups[level]?.id === group.id" :groups="group.children" :level="nextLevel" :activeGroups="activeGroups"/>
+            <Groups v-if="activeGroups[level]?.id === group.id" :groups="group.children" :level="nextLevel" :activeGroups="activeGroups" @update-active-group="$emit('update-active-group', $event)"/>
         </li>
     </ul>
 </template>
@@ -27,6 +27,8 @@ const props = defineProps({
 
 const nextLevel = computed(() => props.level + 1);
 
+const emit = defineEmits(['update-active-group']);
+
 const setActive = (group, level) => {
     if (props.activeGroups[level]?.id === group.id) {
         // Если уже активна, сбрасываем
@@ -41,6 +43,8 @@ const setActive = (group, level) => {
 
         // Устанавливаем новую активную группу
         props.activeGroups[level] = group;
+
+        emit('update-active-group', group);
     }
 };
 </script>
