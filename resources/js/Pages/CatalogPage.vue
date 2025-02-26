@@ -1,10 +1,11 @@
 <template>
-    <div class="container mt-5">
+    <MainLayout>
         <h1>Каталог товаров</h1>
 
         <h2>Группы товаров</h2>
         <Groups :groups="groups" :level="0" :activeGroups="activeGroups" @update-active-group="updateActiveGroup"/>
 
+        <h2 class="mt-5">Товары</h2>
         <!-- Выбор количества товаров на странице -->
         <div class="mb-3">
             <label for="perPage" class="form-label">Товаров на странице:</label>
@@ -12,8 +13,6 @@
                 <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
             </select>
         </div>
-
-        <h2 class="mt-5">Товары</h2>
         <div class="row">
             <div v-for="product in products.data" :key="product.id" class="col-md-4 mb-4">
                 <div class="card">
@@ -35,10 +34,11 @@
                 </li>
             </ul>
         </nav>
-    </div>
+    </MainLayout>
 </template>
 
 <script setup>
+import MainLayout from '@/Layouts/MainLayout.vue';
 import Groups from './Groups.vue';
 import { reactive, ref, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
