@@ -3,7 +3,7 @@
         <h1>Каталог товаров</h1>
 
         <h2>Группы товаров</h2>
-        <Groups :groups="groups" />
+        <Groups :groups="groups" :level="0" :activeGroups="activeGroups"/>
 
         <h2 class="mt-5">Товары</h2>
         <!-- <div class="row">
@@ -22,7 +22,14 @@
 
 <script setup>
 import Groups from './Groups.vue';
+import { reactive } from 'vue';
+
 const props = defineProps({
     groups: Array,
 });
+
+const activeGroups = reactive({});
+
+const varX = ref(null); // Переменная для отслеживания активной группы
+// varX changed func
 </script>
