@@ -11,7 +11,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $groupIds = $request->query('group_ids', []);
-        $perPage = $request->query('per_page', 10); // Количество товаров на страницу (по умолчанию 10)
+        $perPage = $request->query('per_page', 6); // Количество товаров на страницу (по умолчанию 6)
 
         $query = Product::query();
 

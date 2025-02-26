@@ -5,6 +5,14 @@
         <h2>Группы товаров</h2>
         <Groups :groups="groups" :level="0" :activeGroups="activeGroups" @update-active-group="updateActiveGroup"/>
 
+        <!-- Выбор количества товаров на странице -->
+        <div class="mb-3">
+            <label for="perPage" class="form-label">Товаров на странице:</label>
+            <select id="perPage" class="form-select w-auto d-inline-block" v-model="perPage" @change="fetchProducts()">
+                <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+            </select>
+        </div>
+
         <h2 class="mt-5">Товары</h2>
         <div class="row">
             <div v-for="product in products.data" :key="product.id" class="col-md-4 mb-4">
@@ -44,10 +52,17 @@ const products = ref({ data: [], links: [] });
 const activeGroup = ref(null);
 const activeGroups = reactive({});
 
+// Количество товаров на странице
+const perPage = ref(6);
+const perPageOptions = [6, 12, 18];
+
 const fetchProducts = async (url = '/api/products') => {
     try {
         const response = await axios.get(url, {
-            params: { group_ids: activeGroup.value }
+            params: {
+                group_ids: activeGroup.value,
+                per_page: perPage.value
+            }
         });
         products.value = response.data;
     } catch (error) {
