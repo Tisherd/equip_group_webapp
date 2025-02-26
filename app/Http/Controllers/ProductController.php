@@ -3,63 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function show($id)
     {
-        //
-    }
+        $product = Product::with('price', 'group')->findOrFail($id);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        // Генерация хлебных крошек
+        $breadcrumbs = [];
+        $currentGroup = $product->group;
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        while ($currentGroup) {
+            array_unshift($breadcrumbs, [
+                'id' => $currentGroup->id,
+                'name' => $currentGroup->name,
+            ]);
+            $currentGroup = $currentGroup->parent;
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Product $product)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
-    {
-        //
+        return Inertia::render('ProductPage', [
+            'product' => $product,
+            'breadcrumbs' => $breadcrumbs,
+        ]);
     }
 }
