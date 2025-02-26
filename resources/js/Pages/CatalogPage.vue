@@ -4,15 +4,23 @@
 
         <h2>Группы товаров</h2>
         <ul class="list-group">
-            <li v-for="group in groups" :key="group.id" class="list-group-item">
-                <Link :href="route('group.show', group.id)">
-                {{ group.name }} ({{ group.total_products }} товаров)
-                </Link>
+            <li
+                v-for="group in groups"
+                :key="group.id"
+                class="list-group-item"
+            >
+                <p
+                    @click="setActive(group)"
+                    :class="{ 'active': group.active }">
+                    {{ group.name }} ({{ group.products_quantity }})
+                </p>
+
+                <GroupItem :group="group" />
             </li>
         </ul>
 
         <h2 class="mt-5">Товары</h2>
-        <div class="row">
+        <!-- <div class="row">
             <div v-for="product in products.data" :key="product.id" class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body">
@@ -22,15 +30,24 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3';
-
-defineProps({
+import GroupItem from './GroupItem.vue';
+const props = defineProps({
     groups: Array,
-    products: Object,
 });
+
+// Функция для обработки клика и установки active
+const setActive = (group) => {
+    group.active = !group.active; // Переключаем состояние
+};
 </script>
+
+<style scoped>
+.active {
+    background-color: #d4edda;
+}
+</style>
