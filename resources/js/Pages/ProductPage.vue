@@ -6,7 +6,6 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item" v-for="crumb in breadcrumbs" :key="crumb.id">
-                    <Link :href="route('group.show', crumb.id)">{{ crumb.name }}</Link>
                 </li>
             </ol>
         </nav>
@@ -17,8 +16,7 @@
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { Link } from '@inertiajs/vue3';
 
-defineProps({
+const props = defineProps({
     product: Object,
-    breadcrumbs: Array,
 });
 </script>

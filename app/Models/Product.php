@@ -12,6 +12,8 @@ class Product extends Model
     /** @use HasFactory<\Database\Factories\ProductFactory> */
     use HasFactory;
 
+    protected $with = ['price'];
+
     public function group(): BelongsTo
     {
         return $this->belongsTo(Group::class, 'id_group');

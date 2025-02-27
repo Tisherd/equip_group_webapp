@@ -10,4 +10,4 @@ Route::get('/', function () {
 })->name('about_project');
 
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog');
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
