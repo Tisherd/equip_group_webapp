@@ -10,7 +10,7 @@ markdownContent.value = marked(readme);
 
 <template>
     <MainLayout>
-        <div class="prose prose-lg max-w-none p-6 bg-white shadow-md rounded-md">
+        <div class="prose prose-lg max-w-none p-6">
             <div v-html="markdownContent"></div>
         </div>
     </MainLayout>
