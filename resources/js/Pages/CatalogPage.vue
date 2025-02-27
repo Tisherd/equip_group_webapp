@@ -57,7 +57,7 @@
         <nav aria-label="Page navigation">
             <ul class="pagination">
                 <li v-for="(link, k) in products.links" :key="k" class="page-item" :class="{ active: link.active, disabled: !link.url }">
-                    <a v-if="link.url" class="page-link" href="#" @click.prevent="fetchProducts(link.url)">{{ link.label }}</a>
+                    <a v-if="link.url" class="page-link" href="#" @click.prevent="fetchProducts(link.url)" v-html="link.label"></a>
                     <span v-else class="page-link" v-html="link.label"></span>
                 </li>
             </ul>
