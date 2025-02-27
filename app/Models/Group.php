@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Services\GroupHierarchy;
 
 class Group extends Model
 {
@@ -19,15 +18,8 @@ class Group extends Model
         return $this->hasMany(Product::class, 'id_group');
     }
 
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(Group::class, 'id_parent');
-    }
-
-    public function scopeWithHierarchy($query): array
-    {
-        $groups = $query->withCount('products')->get();
-        $hierarchy = new GroupHierarchy($groups);
-        return $hierarchy->getHierarchy();
     }
 }
