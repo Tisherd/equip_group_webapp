@@ -76,4 +76,16 @@ class GroupHierarchy
     {
         return $this->groupsById[$groupId]['full_group_ids'] ?? [];
     }
+
+    public function getActiveGroups(int $groupId): array
+    {
+        $activeGroups = [];
+
+        while (isset($this->groupsById[$groupId])) {
+            array_unshift($activeGroups, $this->groupsById[$groupId]); // Добавляем в начало массива
+            $groupId = $this->groupsById[$groupId]['id_parent']; // Переходим к родителю
+        }
+
+        return $activeGroups;
+    }
 }
