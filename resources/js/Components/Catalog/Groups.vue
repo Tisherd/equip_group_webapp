@@ -6,7 +6,7 @@
             class="list-group-item"
         >
             <p
-                @click="setActive(group, level)"
+                @click="setGroup(group)"
                 :class="{ 'active': group.active }">
                 {{ group.name }} ({{ group.products_quantity }})
             </p>
@@ -23,7 +23,7 @@ const props = defineProps({
     groups: Array,
 });
 
-const setActive = (group) => {
+const setGroup = (group) => {
     router.visit(route('catalog', { activeGroupId: group.id }), {
         // preserveState: true, // Сохраняем состояние страницы
         // preserveScroll: true, // Сохраняем прокрутку
