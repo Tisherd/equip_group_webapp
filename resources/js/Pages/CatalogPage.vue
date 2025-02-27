@@ -3,7 +3,7 @@
         <h1>Каталог товаров</h1>
 
         <h2>Группы товаров</h2>
-        <Groups :groups="groups" :level="0" :activeGroups="activeGroups" @update-active-group="updateActiveGroup"/>
+        <Groups :groups="groups"/>
 
         <h2 class="mt-4">Товары</h2>
         <!-- Настройки отображения -->
@@ -67,8 +67,8 @@
 
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
-import Groups from './Groups.vue';
-import { reactive, ref, onMounted } from 'vue';
+import Groups from '@/Components/Catalog/Groups.vue';
+import { ref, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import axios from 'axios';
 
@@ -78,10 +78,7 @@ const props = defineProps({
 });
 
 const activeGroupId = ref(props.activeGroupId);
-
 const products = ref({ data: [], links: [] });
-const activeGroup = ref(null);
-const activeGroups = reactive({});
 
 // Количество товаров на странице
 const perPage = ref(6);
@@ -95,11 +92,9 @@ const sortBy = ref('price_asc'); // Значение по умолчанию
 
 const fetchProducts = async (url = '/api/products') => {
     try {
-        console.log(activeGroupId);
         const response = await axios.get(url, {
             params: {
                 active_group: activeGroupId.value,
-                group_ids: activeGroup.value,
                 per_page: perPage.value,
                 sort_by: sortBy.value
             }
@@ -108,12 +103,6 @@ const fetchProducts = async (url = '/api/products') => {
     } catch (error) {
         console.error('Ошибка загрузки товаров:', error);
     }
-};
-
-const updateActiveGroup = async (group) => {
-    //activeGroup.value = group.full_group_ids;
-    activeGroupId.value = group.id;
-    fetchProducts();
 };
 
 onMounted(() => {
