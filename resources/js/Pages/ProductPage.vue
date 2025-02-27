@@ -1,5 +1,5 @@
 <template>
-    <div class="container mt-5">
+    <MainLayout>
         <h1>{{ product.name }}</h1>
         <p>Цена: {{ product.price?.price }} ₽</p>
 
@@ -10,10 +10,11 @@
                 </li>
             </ol>
         </nav>
-    </div>
+    </MainLayout>
 </template>
 
 <script setup>
+import MainLayout from '@/Layouts/MainLayout.vue';
 import { Link } from '@inertiajs/vue3';
 
 defineProps({
