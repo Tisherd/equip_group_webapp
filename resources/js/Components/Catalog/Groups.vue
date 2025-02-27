@@ -25,9 +25,8 @@ const props = defineProps({
 
 const setGroup = (group) => {
     router.visit(route('catalog', { activeGroupId: group.id }), {
-        // preserveState: true, // Сохраняем состояние страницы
-        // preserveScroll: true, // Сохраняем прокрутку
-        // only: ['products'], // Обновляем только товары (если используется Inertia)
+        preserveState: true,
+        preserveScroll: true,
     });
 };
 </script>

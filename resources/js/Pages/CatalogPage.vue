@@ -68,7 +68,7 @@
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
 import Groups from '@/Components/Catalog/Groups.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import axios from 'axios';
 
@@ -104,6 +104,11 @@ const fetchProducts = async (url = '/api/products') => {
         console.error('Ошибка загрузки товаров:', error);
     }
 };
+
+watch(() => props.activeGroupId, (newVal) => {
+    activeGroupId.value = newVal;
+    fetchProducts();
+});
 
 onMounted(() => {
     fetchProducts();
