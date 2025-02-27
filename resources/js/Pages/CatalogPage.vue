@@ -74,7 +74,10 @@ import axios from 'axios';
 
 const props = defineProps({
     groups: Array,
+    activeGroupId: Number,
 });
+
+const activeGroupId = ref(props.activeGroupId);
 
 const products = ref({ data: [], links: [] });
 const activeGroup = ref(null);
@@ -92,8 +95,10 @@ const sortBy = ref('price_asc'); // Значение по умолчанию
 
 const fetchProducts = async (url = '/api/products') => {
     try {
+        console.log(activeGroupId);
         const response = await axios.get(url, {
             params: {
+                active_group: activeGroupId.value,
                 group_ids: activeGroup.value,
                 per_page: perPage.value,
                 sort_by: sortBy.value
@@ -106,7 +111,8 @@ const fetchProducts = async (url = '/api/products') => {
 };
 
 const updateActiveGroup = async (group) => {
-    activeGroup.value = group.full_group_ids;
+    //activeGroup.value = group.full_group_ids;
+    activeGroupId.value = group.id;
     fetchProducts();
 };
 

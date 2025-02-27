@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Services\GroupHierarchy;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, GroupHierarchy $groupHierarchy)
     {
-        $groupIds = $request->query('group_ids', []);
+        $activeGroupId = (int)$request->input('active_group', 0);
+        $groupIds = $groupHierarchy->getFullGroupIds($activeGroupId);
 
         $query = Product::query()
             ->leftJoin('prices', 'products.id', '=', 'prices.id_product') // Присоединяем цены

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Group;
 use Illuminate\Database\Eloquent\Collection;
 
 class GroupHierarchy
@@ -10,9 +11,9 @@ class GroupHierarchy
     protected array $groupsById = [];
     protected array $hierarchy = [];
 
-    public function __construct(Collection $groups)
+    public function __construct()
     {
-        $this->groups = $groups;
+        $this->groups = Group::withCount('products')->get();
         $this->buildHierarchy();
     }
 
@@ -24,6 +25,7 @@ class GroupHierarchy
                 'id' => $group->id,
                 'name' => $group->name,
                 'products_quantity' => $group->products_count ?? 0,
+                'active' => false,
                 'id_parent' => $group->id_parent,
                 'full_group_ids' => [$group->id],
                 'children' => [],
@@ -57,6 +59,17 @@ class GroupHierarchy
     public function getHierarchy(): array
     {
         return $this->hierarchy;
+    }
+
+    public function setActiveGroup(int $activeGroupId)
+    {
+        foreach ($this->groupsById as &$group) {
+            if (in_array($activeGroupId, $group['full_group_ids'])) {
+                $group['active'] = true;
+            } else {
+                $group['active'] = false;
+            }
+        }
     }
 
     public function getFullGroupIds($groupId): array

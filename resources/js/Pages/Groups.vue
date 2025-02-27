@@ -11,13 +11,15 @@
                 {{ group.name }} ({{ group.products_quantity }})
             </p>
 
-            <Groups v-if="activeGroups[level]?.id === group.id" :groups="group.children" :level="nextLevel" :activeGroups="activeGroups" @update-active-group="$emit('update-active-group', $event)"/>
+            <!-- <Groups v-if="activeGroups[level]?.id === group.id" :groups="group.children" :level="nextLevel" :activeGroups="activeGroups" @update-active-group="$emit('update-active-group', $event)"/> -->
+            <Groups v-if="group.active" :groups="group.children" :level="nextLevel" :activeGroups="activeGroups" @update-active-group="$emit('update-active-group', $event)"/>
         </li>
     </ul>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
     groups: Array,
@@ -30,22 +32,28 @@ const nextLevel = computed(() => props.level + 1);
 const emit = defineEmits(['update-active-group']);
 
 const setActive = (group, level) => {
-    if (props.activeGroups[level]?.id === group.id) {
-        // Если уже активна, сбрасываем
-        delete props.activeGroups[level];
-    } else {
-        // Убираем активность на этом уровне и ниже
-        Object.keys(props.activeGroups).forEach(lvl => {
-            if (lvl >= level) {
-                delete props.activeGroups[lvl];
-            }
+    router.visit(route('catalog', { activeGroupId: group.id }), {
+            // preserveState: true, // Сохраняем состояние страницы
+            // preserveScroll: true, // Сохраняем прокрутку
+            // only: ['products'], // Обновляем только товары (если используется Inertia)
         });
 
-        // Устанавливаем новую активную группу
-        props.activeGroups[level] = group;
+    // if (props.activeGroups[level]?.id === group.id) {
+    //     // Если уже активна, сбрасываем
+    //     delete props.activeGroups[level];
+    // } else {
+    //     // Убираем активность на этом уровне и ниже
+    //     Object.keys(props.activeGroups).forEach(lvl => {
+    //         if (lvl >= level) {
+    //             delete props.activeGroups[lvl];
+    //         }
+    //     });
 
-        emit('update-active-group', group);
-    }
+    //     // Устанавливаем новую активную группу
+    //     props.activeGroups[level] = group;
+
+    //     emit('update-active-group', group);
+    // }
 };
 </script>
 
