@@ -17,7 +17,7 @@
 ### Инструкция по запуску проекта:
 - cp .env.example .env, т.е по-простому создайте файл .env и скопируйте содержимое из файла .env.example
 - в файле .env изменить места "GENERATE_HERE" на рандомный пароль
-- запустить make project-launch
+- запустить в консоли make project-launch
 - проверить <a href="http://localhost">http://localhost</a>
 
 # Описание задачи
