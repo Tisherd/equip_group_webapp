@@ -11,15 +11,34 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $groupIds = $request->query('group_ids', []);
-        $perPage = $request->query('per_page', 6); // Количество товаров на страницу (по умолчанию 6)
 
-        $query = Product::query();
+        $query = Product::query()
+            ->leftJoin('prices', 'products.id', '=', 'prices.id_product') // Присоединяем цены
+            ->select('products.*', 'prices.price') // Выбираем данные
+            ->with('price'); // Загружаем связь
 
         if (!empty($groupIds)) {
             $query->whereIn('id_group', $groupIds);
         }
+            // Обработка сортировки
+        if ($request->has('sort_by')) {
+            switch ($request->sort_by) {
+                case 'price_asc':
+                    $query->orderBy('price');
+                    break;
+                case 'price_desc':
+                    $query->orderByDesc('price');
+                    break;
+                case 'name_asc':
+                    $query->orderBy('name');
+                    break;
+                case 'name_desc':
+                    $query->orderByDesc('name');
+                    break;
+            }
+        }
 
-        $products = $query->with('price')->paginate($perPage);
+        $products = $query->paginate($request->query('per_page', 6));
 
         return response()->json($products);
     }

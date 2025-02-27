@@ -5,15 +5,23 @@
         <h2>Группы товаров</h2>
         <Groups :groups="groups" :level="0" :activeGroups="activeGroups" @update-active-group="updateActiveGroup"/>
 
-
         <h2 class="mt-4">Товары</h2>
         <!-- Настройки отображения -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <!-- Выбор количества товаров -->
-            <div>
+            <div class="d-flex align-items-center">
+                <!-- Выбор количества товаров -->
                 <label for="perPage" class="form-label me-2">Товаров на странице:</label>
-                <select id="perPage" class="form-select w-auto d-inline-block" v-model="perPage" @change="fetchProducts()">
+                <select id="perPage" class="form-select w-auto d-inline-block me-3" v-model="perPage" @change="fetchProducts()">
                     <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+                </select>
+
+                <!-- Сортировка -->
+                <label for="sortBy" class="form-label me-2">Сортировать по:</label>
+                <select id="sortBy" class="form-select w-auto d-inline-block" v-model="sortBy" @change="fetchProducts()">
+                    <option value="price_asc">Цена (по возрастанию)</option>
+                    <option value="price_desc">Цена (по убыванию)</option>
+                    <option value="name_asc">Название (А-Я)</option>
+                    <option value="name_desc">Название (Я-А)</option>
                 </select>
             </div>
 
@@ -79,12 +87,16 @@ const perPageOptions = [6, 12, 18];
 // Переключение между списком и сеткой
 const viewMode = ref('grid');
 
+// Сортировка
+const sortBy = ref('price_asc'); // Значение по умолчанию
+
 const fetchProducts = async (url = '/api/products') => {
     try {
         const response = await axios.get(url, {
             params: {
                 group_ids: activeGroup.value,
-                per_page: perPage.value
+                per_page: perPage.value,
+                sort_by: sortBy.value
             }
         });
         products.value = response.data;
